@@ -12,6 +12,7 @@ Commands include going to the:
 * specific slide numbers
 * slide titles
 * pictures within slides  
+
 As well as requesting outside information to be overlaid over the presentation, including pictures and Wolfram Alpha requests.  
 Consequently, Presentalk must make many external api calls for image tagging, Wolfram Alpha, etc that charge per request. To fund hosting, api usage, and further development, monetization must be put in place before making the service public.  
 This project will implement a token based monetization system to solve the monetization problem without requiring intrusive advertising or subscriptions.
