@@ -12,24 +12,24 @@ contract('tokenTest', function(accounts) {
 
 	beforeEach(async function() {
 		owner = accounts[0];
-		token = await Presentoken.new(init, {from:  owner});
-		ownerBalance = await token.balanceOf(owner);
-		total = await token.totalSupply.call();
+		presentoken = await Presentoken.new(init, {from:  owner});
+		ownerBalance = await presentoken.balanceOf(owner);
+		total = await presentoken.totalSupply.call();
 	});
 
 	describe('--Create--', function() {
-		it("Initially 500 token total", async function() {
+		it("Initially 500 presentoken total", async function() {
 			assert.equal(total, init, "Correct supply");
 		});
 		it("Creator holds initial 500 tokens", async function() {
-			assert.equal(balanceCreator, init, "Correct balance");
+			assert.equal(ownerBalance, init, "Correct balance");
 		});
 	});
 	describe('--Transfer--', function() {
 		it("Transferring from owner works", async function() {
-			await token.transfer(accounts[1], 100, { from: owner} );
-			let receiverBalance = await token.balanceOf(accounts[1]);
-			let ownerBalance = await token.balanceOf(owner);
+			await presentoken.transfer(accounts[1], 100, { from: owner} );
+			let receiverBalance = await presentoken.balanceOf(accounts[1]);
+			ownerBalance = await presentoken.balanceOf(owner);
 
 			assert.equal(receiverBalance.valueOf(), 100, "receiverBalance correct");
 			assert.equal(ownerBalance.valueOf(), 400, "ownerBalance correct");
@@ -37,9 +37,9 @@ contract('tokenTest', function(accounts) {
 	});
 	describe('--Burn--', function() {
 		it("Owner can burn", async function() {
-			await token.burn(100, { from: owner} );
-			let total = await token.total.call();
-			let ownerBalance = await token.balanceOf(owner);
+			await presentoken.burn(100, { from: owner} );
+			total = await presentoken.totalSupply.call();
+			ownerBalance = await presentoken.balanceOf(owner);
 
 			assert.equal(total.valueOf(), 400, "total correct");
 			assert.equal(ownerBalance.valueOf(), 400, "ownerBalance correct");
@@ -47,9 +47,9 @@ contract('tokenTest', function(accounts) {
 	});
 	describe('--Mint--', function() {
 		it("Owner can mint", async function() {
-			await token.mint(100, { from: owner} );
-			let total = await token.total.call();
-			let ownerBalance = await token.balanceOf(owner);
+			await presentoken.mint(100, { from: owner} );
+			total = await presentoken.totalSupply.call();
+			ownerBalance = await presentoken.balanceOf(owner);
 
 			assert.equal(total.valueOf(), 600, "total correct");
 			assert.equal(ownerBalance.valueOf(), 600, "ownerBalance correct");
