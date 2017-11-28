@@ -7,9 +7,7 @@ pragma solidity ^0.4.15;
  */
 
 contract Presentoken {
-    /// total amount of tokens
     uint256 public totalSupply;
-    // Owner of token contract
     address public owner;
 
     // Maps account addresses to balances
@@ -55,7 +53,7 @@ contract Presentoken {
     /// @notice burn `_value` token from `msg.sender`
     /// @param _value The amount of token to be burned
     /// @return Whether the burn was successful or not
-    function burn(uint256 _value) returns (bool success) {
+    function burn(uint256 _value) isOwner() returns (bool success) {
         // Check senders balance, make sure burn is positive and doesn't cause underflow in balance or supply
         if (balances[msg.sender] >= _value && _value > 0 && balances[msg.sender] - _value < balances[msg.sender] && totalSupply - _value < totalSupply) {
             // Remove burned value from senders account
