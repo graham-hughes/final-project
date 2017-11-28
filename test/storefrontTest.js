@@ -13,7 +13,7 @@ contract('storefrontTest', function(accounts) {
 	beforeEach(async function() {
 		owner = accounts[0];
 		storefront = await StoreFront.new(initSupply, initPrice, {from:  owner});
-		presentoken = await storefront.presentoken.call();
+		presentoken = Presentoken.at(await storefront.presentoken.call());
 	});
 
 	describe('--Create--', function() {
@@ -23,7 +23,7 @@ contract('storefrontTest', function(accounts) {
 			assert.equal(tokenPrice, initPrice, "tokenPrice correct" );
 		});
 		it("Initial totalSupply correct", async function() {
-			let totalSupply = await storefront.presentoken.totalSupply.call();
+			let totalSupply = await presentoken.totalSupply.call();
 
 			assert.equal(totalSupply, initSupply, "totalSupply correct" );
 		});
@@ -45,7 +45,7 @@ contract('storefrontTest', function(accounts) {
 			await storefront.purchaseCoins(1, {from: accounts[1], value: 1});
 			let success = await storefront.withdraw({from: owner});
 
-			assert.equal(success.valueOf(), true, "Crowdsale starts with zero tokens");
+			assert.equal(success.valueOf(), true, "Withdraw correct");
 		});
 	});
 });
