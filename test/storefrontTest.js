@@ -6,14 +6,16 @@ const Presentoken = artifacts.require("./Presentoken.sol");
 contract('storefrontTest', function(accounts) {
 	let presentoken;
 	let storefront;
-	let owner;
+	let ownerPresentoken;
+	let ownerStorefront;
 	const initSupply = 500;
 	const initPrice = 1;
 
 	beforeEach(async function() {
-		owner = accounts[0];
-		storefront = await StoreFront.new(initSupply, initPrice, {from:  owner});
+		ownerStorefront = accounts[0];
+		storefront = await StoreFront.new(initSupply, initPrice, {from:  ownerStorefront});
 		presentoken = Presentoken.at(await storefront.presentoken.call());
+		ownerPresentoken = await presentoken.owner.call();
 	});
 
 	describe('--Create--', function() {
@@ -28,23 +30,22 @@ contract('storefrontTest', function(accounts) {
 			assert.equal(totalSupply, initSupply, "totalSupply correct" );
 		});
 		it("Owner correct", async function() {
-			let ownerStorefront = await storefront.owner.call();
-			let ownerPresentoken = await presentoken.owner.call();
+			let ownStf = await storefront.owner.call();
 
-			assert.equal(ownerStorefront, ownerPresentoken, "Contracts have correct owners" );
-			assert.equal(owner, ownerPresentoken, "owner owns both contracts" );
+			assert.equal(ownStf, accounts[0], "StoreFront owner set correctly" );
+			assert.equal(ownerPresentoken, storefront.address, "owner owns both contracts" );
 		});
 		it("Owner correct starting balance", async function() {
-			let ownersTokens = await presentoken.balanceOf(owner);
+			let ownersTokens = await presentoken.balanceOf(ownerPresentoken);
 
 		});
 	});
 
 	describe('--Purchase--', function() {
 		it("Purchase works", async function() {
-			await storefront.purchaseCoins(1, {from: accounts[1], value: 100});
-			let tokensPurchased = await presentoken.balanceOf(accounts[1]);
-			let ownersTokens = await presentoken.balanceOf(owner);
+			await storefront.purchaseCoins(1, {from: accounts[1], value: 1});
+			let tokensPurchased = await presentoken.balanceOf.call(accounts[1]);
+			let ownersTokens = await presentoken.balanceOf.call(ownerPresentoken);
 
 			// assert.equal(tokensPurchased.valueOf(), 1, "Purchaser received correct number tokens");
 			assert.equal(ownersTokens.valueOf(), 499, "Owner reduced to correct number tokens");
@@ -55,7 +56,7 @@ contract('storefrontTest', function(accounts) {
 		it("The owner can Withdraw funds", async function() {
 			await storefront.purchaseCoins(1, {from: accounts[1], value: 1});
 			let balanceBefore = await storefront.totalValue();
-			await storefront.withdraw({from: owner});
+			await storefront.withdraw({from: ownerStorefront});
 			let balanceAfter = await storefront.totalValue();
 
 			assert.equal(balanceBefore.valueOf(), 1, "Correct initial balance");

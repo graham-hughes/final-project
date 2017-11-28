@@ -12,7 +12,7 @@ contract('tokenTest', function(accounts) {
 
 	beforeEach(async function() {
 		owner = accounts[0];
-		presentoken = await Presentoken.new(init, owner);
+		presentoken = await Presentoken.new(init, {from: owner});
 		ownerBalance = await presentoken.balanceOf(owner);
 		total = await presentoken.totalSupply.call();
 	});

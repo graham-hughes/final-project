@@ -21,7 +21,7 @@ contract StoreFront {
     /* Constructor */
     function StoreFront(uint256 _initialSupply, uint256 _initialPrice) {
     	owner = msg.sender;
-        presentoken = new Presentoken(_initialSupply, owner);
+        presentoken = new Presentoken(_initialSupply);
         tokenPrice = _initialPrice;
     }
 
@@ -35,11 +35,10 @@ contract StoreFront {
 
     function purchaseCoins(uint256 _numCoins) payable returns (bool success) {
     	if (msg.value > 0 && msg.value >= (_numCoins * tokenPrice)) {
-    		// if (presentoken.balanceOf(owner) < _numCoins) {
-    		// 	presentoken.mint(presentoken.totalSupply()); // Doubles total supply if owner out of tokens
-    		// } 
-    		presentoken.transfer(msg.sender, _numCoins);
-            return true;
+    		if (presentoken.balanceOf(this) < _numCoins) {
+    			presentoken.mint(presentoken.totalSupply() + _numCoins); // Mints 2xcurrent + as many new coins as needed
+    		} 
+            return presentoken.transfer(msg.sender, _numCoins);
     	}
         return false;
     }
