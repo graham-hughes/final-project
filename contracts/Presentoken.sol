@@ -19,8 +19,8 @@ contract Presentoken {
     }
 
     // Constructor
-    function Presentoken(uint256 _totalSupply) {
-        owner = msg.sender;
+    function Presentoken(uint256 _totalSupply, address _owner) {
+        owner = _owner;
         totalSupply = _totalSupply;
         balances[owner] = _totalSupply;
     }

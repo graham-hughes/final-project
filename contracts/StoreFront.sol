@@ -20,8 +20,8 @@ contract StoreFront {
 
     /* Constructor */
     function StoreFront(uint256 _initialSupply, uint256 _initialPrice) {
-    	presentoken = new Presentoken(_initialSupply);
     	owner = msg.sender;
+        presentoken = new Presentoken(_initialSupply, owner);
         tokenPrice = _initialPrice;
     }
 
@@ -33,13 +33,15 @@ contract StoreFront {
     	return false;
     }
 
-    function purchaseCoins(uint256 _numCoins) payable {
-    	if (msg.value > 0 && msg.value >= _numCoins * tokenPrice) {
-    		if (presentoken.balanceOf(owner) < _numCoins) {
-    			presentoken.mint(presentoken.totalSupply()); // Doubles total supply if owner out of tokens
-    		} 
+    function purchaseCoins(uint256 _numCoins) payable returns (bool success) {
+    	if (msg.value > 0 && msg.value >= (_numCoins * tokenPrice)) {
+    		// if (presentoken.balanceOf(owner) < _numCoins) {
+    		// 	presentoken.mint(presentoken.totalSupply()); // Doubles total supply if owner out of tokens
+    		// } 
     		presentoken.transfer(msg.sender, _numCoins);
+            return true;
     	}
+        return false;
     }
 	
     /* Allows owner to withdraw funds*/
@@ -49,6 +51,10 @@ contract StoreFront {
             return true;
         }
         return false;
+    }
+
+    function totalValue() constant returns (uint256 total) {
+        return this.balance;
     }
 
     function() payable {

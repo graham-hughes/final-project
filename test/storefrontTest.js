@@ -27,25 +27,39 @@ contract('storefrontTest', function(accounts) {
 
 			assert.equal(totalSupply, initSupply, "totalSupply correct" );
 		});
+		it("Owner correct", async function() {
+			let ownerStorefront = await storefront.owner.call();
+			let ownerPresentoken = await presentoken.owner.call();
+
+			assert.equal(ownerStorefront, ownerPresentoken, "Contracts have correct owners" );
+			assert.equal(owner, ownerPresentoken, "owner owns both contracts" );
+		});
+		it("Owner correct starting balance", async function() {
+			let ownersTokens = await presentoken.balanceOf(owner);
+
+		});
 	});
 
 	describe('--Purchase--', function() {
 		it("Purchase works", async function() {
-			await storefront.purchaseCoins(1, {from: accounts[1], value: 1});
+			await storefront.purchaseCoins(1, {from: accounts[1], value: 100});
 			let tokensPurchased = await presentoken.balanceOf(accounts[1]);
 			let ownersTokens = await presentoken.balanceOf(owner);
 
-			assert.equal(tokensPurchased, 1, "Purchaser received correct number tokens");
-			assert.equal(tokensPurchased, initSupply - 1, "Owner reduced to correct number tokens");
+			// assert.equal(tokensPurchased.valueOf(), 1, "Purchaser received correct number tokens");
+			assert.equal(ownersTokens.valueOf(), 499, "Owner reduced to correct number tokens");
 		});
 	});
 
 	describe('--Withdraw--', function() {
 		it("The owner can Withdraw funds", async function() {
 			await storefront.purchaseCoins(1, {from: accounts[1], value: 1});
-			let success = await storefront.withdraw({from: owner});
+			let balanceBefore = await storefront.totalValue();
+			await storefront.withdraw({from: owner});
+			let balanceAfter = await storefront.totalValue();
 
-			assert.equal(success.valueOf(), true, "Withdraw correct");
+			assert.equal(balanceBefore.valueOf(), 1, "Correct initial balance");
+			assert.equal(balanceAfter.valueOf(), 0, "Withdrew entire balance");
 		});
 	});
 });
