@@ -22,5 +22,10 @@ Presentalk will charge a token per presentation upload, and users will be charge
 This will require two smart contracts. One for the token contract itself, and the other for the sale of the tokens. This token will only implement a subset of erc20 functionalities, as it is intended to be used solely for Presentalk and not as a medium of exchange. Likewise, the token sale contract will resemble a store-front in functionality as the sale of the token is not intended to be limited.  
 For the required frontend component, jquery and web3 will be used for purchasing tokens.
 
+## Instructions
+* Deploy StoreFront contract
+* Replace contract and owner addresses in web3.js and corresponding inline script in index.html
+* index.html has inline js that runs clientside and makes requests to the smart contracts using web3
+
 ## Credit:
 * [coursetro](https://coursetro.com/posts/code/99/Interacting-with-a-Smart-Contract-through-Web3.js-(Tutorial)) for html and css starter
