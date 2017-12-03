@@ -21,3 +21,6 @@ This project will implement a token based monetization system to solve the monet
 Presentalk will charge a token per presentation upload, and users will be charged a set amount of ether to purchase these tokens.  
 This will require two smart contracts. One for the token contract itself, and the other for the sale of the tokens. This token will only implement a subset of erc20 functionalities, as it is intended to be used solely for Presentalk and not as a medium of exchange. Likewise, the token sale contract will resemble a store-front in functionality as the sale of the token is not intended to be limited.  
 For the required frontend component, React and web3 will be used for purchasing tokens.
+
+## Credit:
+* [coursetro](https://coursetro.com/posts/code/99/Interacting-with-a-Smart-Contract-through-Web3.js-(Tutorial)) for html and css
